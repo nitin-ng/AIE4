@@ -1,3 +1,4 @@
 secrets.txt
 Movies.csv
 Week 7/Day 2/Movies.csv
+echo "Week 7/Day 2/Movies.csv" >> .gitignore
