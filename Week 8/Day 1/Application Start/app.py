@@ -1,26 +1,50 @@
-### Import Section ###
-"""
-IMPORTS HERE
-"""
+import os
+import chainlit as cl
+from langchain.chains import RetrievalQA
+from langchain_openai import ChatOpenAI
+from langchain_community.vectorstores import Qdrant
+from langchain_openai import OpenAIEmbeddings
+from qdrant_client import QdrantClient
 
-### Global Section ###
-"""
-GLOBAL CODE HERE
-"""
+# Initialize OpenAI embeddings
+embeddings = OpenAIEmbeddings(model="text-embedding-3-small")
 
-### On Chat Start (Session Start) Section ###
+# Initialize Qdrant client
+client = QdrantClient(location=":memory:")
+
+# Initialize Qdrant vector store
+vectorstore = Qdrant(
+    client=client,
+    collection_name="JohnWick",
+    embeddings=embeddings
+)
+
+# Initialize ChatOpenAI
+chat_model = ChatOpenAI()
+
+# Create the RetrievalQA chain
+qa_chain = RetrievalQA.from_chain_type(
+    llm=chat_model,
+    retriever=vectorstore.as_retriever(),
+    return_source_documents=True
+)
+
 @cl.on_chat_start
 async def on_chat_start():
-    """ SESSION SPECIFIC CODE HERE """
+    await cl.Message(content="Welcome! Ask me anything about John Wick.").send()
 
-### Rename Chains ###
-@cl.author_rename
-def rename(orig_author: str):
-    """ RENAME CODE HERE """
-
-### On Message Section ###
 @cl.on_message
 async def main(message: cl.Message):
-    """
-    MESSAGE CODE HERE
-    """
+    query = message.content
+    response = qa_chain({"query": query})
+    
+    answer = response['result']
+    source_docs = response['source_documents']
+
+    await cl.Message(content=answer).send()
+
+    if source_docs:
+        source_message = "Sources:\n"
+        for i, doc in enumerate(source_docs[:3], start=1):
+            source_message += f"{i}. {doc.metadata.get('source', 'Unknown')}\n"
+        await cl.Message(content=source_message).send()
