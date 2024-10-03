@@ -1,4 +1,33 @@
 chainlit==0.7.700
+<<<<<<< HEAD
+=======
+charset-normalizer==3.3.2
+click==8.1.7
+dataclasses-json==0.5.14
+langchain_huggingface==0.0.3
+Deprecated==1.2.14
+distro==1.9.0
+exceptiongroup==1.2.2
+fastapi==0.100.1
+fastapi-socketio==0.0.10
+filetype==1.2.0
+frozenlist==1.4.1
+googleapis-common-protos==1.65.0
+greenlet==3.1.1
+grpcio==1.66.2
+grpcio-tools==1.62.3
+h11==0.14.0
+h2==4.1.0
+hpack==4.0.0
+httpcore==0.17.3
+httpx==0.24.1
+hyperframe==6.0.1
+idna==3.10
+importlib_metadata==8.4.0
+jiter==0.5.0
+jsonpatch==1.33
+jsonpointer==3.0.0
+>>>>>>> 6459842828e957aab86fb39a011c735a0b4300fe
 langchain==0.3.0
 langchain-openai==0.2.0
 langchain-community==0.3.0
